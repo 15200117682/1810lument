@@ -51,10 +51,10 @@ class LoginController extends Controller
      * 注册
      */
     public function register(Request $request){
-        $name=$request->input('name');//账号
-        $password=$request->input('password');//密码
-        $pwd=$request->input('pwd');//确认密码
-        $email=$request->input('email');//确认密码
+        $name=$request->input('name');//接收账号
+        $password=$request->input('password');//接收密码
+        $pwd=$request->input('pwd');//接收确认密码
+        $email=$request->input('email');//接收邮箱
         if(empty($name)){
             $text="账号不能为空";
             $msg=$this->error($text);
