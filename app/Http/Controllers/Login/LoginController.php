@@ -14,7 +14,7 @@ class LoginController extends Controller
     //登陆
     public function login(Request $request){
         $name=$request->input('name');//账号
-        $pwd=$request->input('pwd');//密码
+        $pwd=$request->input('password');//密码
         if(empty($name)){
             $text="账号不能为空";
             $msg=$this->error($text);
@@ -29,7 +29,8 @@ class LoginController extends Controller
         $arr=json_decode($obj,true);//转数组格式数据
         if($arr){//判断账号存在
             //判断密码是否正确
-            if($pwd===$arr['user_pwd']){//判断密码
+            $password=md5($pwd);
+            if($password===$arr['user_pwd']){//判断密码
                 $text="登陆成功";
                 $msg=$this->access($text);
                 return $msg;
@@ -62,7 +63,8 @@ class LoginController extends Controller
         }
         if(empty($password)){
             $text="密码不能为空";
-            return $this->error($text);
+            $msg=$this->error($text);
+            return $msg;
         }
         if(empty($pwd)){
             $text="确认密码不能为空";
@@ -86,7 +88,8 @@ class LoginController extends Controller
                 $msg=$this->error($text);
                 return $msg;
             }else{
-                $insert=["user_name"=>$name,"user_pwd"=>$pwd,"email"=>$email];//组装数据
+                $password=md5($pwd);
+                $insert=["user_name"=>$name,"user_pwd"=>$password,"email"=>$email];//组装数据
                 $res=UserModel::insertGetId($insert);
                 if($res){
                     $text="注册成功";
@@ -158,7 +161,6 @@ class LoginController extends Controller
             "text"=>$text
 
         ];
-        $arr=json_encode($arr,JSON_UNESCAPED_UNICODE);
         return $arr;
     }
     //返回正确结果
